@@ -9,7 +9,7 @@ module.exports = {
   options: [
     {
         name: "canal_formulário",
-        description: "Canal para enviar o registro de vendas para os membros.",
+        description: "Canal para enviar o registro de vendas para as Familias.",
         type: Discord.ApplicationCommandOptionType.Channel,
         required: true,
     },
@@ -53,7 +53,7 @@ module.exports = {
                 let botao = new Discord.ActionRowBuilder().addComponents(
                     new Discord.ButtonBuilder()
                     .setCustomId("formulario")
-                    .setEmoji("☝")
+                    .setEmoji("🤑")
                     .setLabel("Clique Aqui!")
                     .setStyle(Discord.ButtonStyle.Primary)
                 );
