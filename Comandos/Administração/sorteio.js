@@ -82,14 +82,6 @@ module.exports = {
         },
       ],
     },
-    {
-      name: "quantidade",
-      type: Discord.ApplicationCommandOptionType.Integer,
-      description: "Quantos ganhadores terá o sorteio?",
-      required: true,
-      min_value: 1,
-      max_value: 10,
-    },
   ],
 
   run: async (client, interaction, args) => {
@@ -101,7 +93,6 @@ module.exports = {
       let premio = interaction.options.getString("prêmio");
       let tempo = interaction.options.getString("tempo");
       let desc = interaction.options.getString("descrição");
-      let quantidade = interaction.options.getInteger("quantidade");
 
       let duracao = ms(tempo);
 
@@ -123,7 +114,6 @@ module.exports = {
 > ${desc}
 
 > Tempo: \`${tempo}\`.
-> Quantidade de ganhadores: \`${quantidade}\`.
 Clique no botão para parcipar.\n**Boa sorte!!!**`)
         .setTimestamp(Date.now() + ms(tempo))
         .setFooter({ text: "Data do sorteio:" })
@@ -169,30 +159,11 @@ Clique no botão para parcipar.\n**Boa sorte!!!**`)
       });
 
       setTimeout(() => {
-        let ganhadores = [];
+        let ganhador = click[Math.floor(Math.random() * click.length)];
 
-        while (ganhadores.length < quantidade && click.length > 0) {
-          let ganhador = click[Math.floor(Math.random() * click.length)];
-          if (!ganhadores.includes(ganhador)) {
-            ganhadores.push(ganhador);
-          } else {
-            click.splice(click.indexOf(ganhador), 1);
-          }
-        }
+        if (click.length == 0) return interaction.followUp(`\n**SORTEIO CANCELADO!**\nNão houveram participantes no sorteio \`${premio}\`.`);
 
-        if (ganhadores.length == 0) return interaction.followUp(`\n**SORTEIO CANCELADO!**\nNão houveram participantes no sorteio \`${premio}\`.`);
-
-        let ganhadoresText = "";
-        for (let i = 0; i < ganhadores.length; i++) {
-          ganhadoresText += `<@${ganhadores[i]}>`;
-          if (i < ganhadores.length - 2) {
-            ganhadoresText += ", ";
-          } else if (i == ganhadores.length - 2) {
-            ganhadoresText += " e ";
-          }
-        }
-
-        interaction.followUp(`**Parabéns ${ganhadoresText} você ganhou o sorteio: \`${premio}\`.**`);
+        interaction.followUp(`**Parabéns <@${ganhador}> você ganhou o sorteio: \`${premio}\`.**`);
 
       }, duracao);
     }
